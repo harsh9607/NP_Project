@@ -1,10 +1,12 @@
 # Server side program
 # Author : Harsh Pathak 
 #Socket Programming 
+import random
 import socket
 from Crypto.PublicKey import RSA
 key = RSA.generate(1024)
 publickey2send = key.publickey()
+
 
 
 # Creating a Socket Object , Type : TCP 
@@ -31,11 +33,19 @@ print('Key exchange successful ! \n')
 
 
 
-dummy = 'Oh hello there..harsh here i had encypted this..but..perhaps you decrypted it =P'
+dummy = 'Oh hello there..harsh here i had encypted this..but..perhaps you decrypted it...let me authenticate if you are Rizwan sir only !'
 Tencypted = ClientsPubKey.encrypt(dummy,int(len(dummy)))
 c.sendall(str(Tencypted))
 print('Your msg in encypted form looks like this ->' + str(Tencypted))
 
+# Authentication Begins !! 
+temp = c.recv(2017)
+d_nonce = key.decrypt(eval(temp))
+print('nonce received ->' + d_nonce )
+print('Authenticating !!!')
+
+E_d_nonce = ClientsPubKey.encrypt(d_nonce,int(len(d_nonce)))
+c.sendall(str(E_d_nonce))
 
 
 while True:
