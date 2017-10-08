@@ -1,7 +1,9 @@
 # Client Side
 #RSA ENCRYPTION USED (1024 bits)
 import random
+import sys
 import socket
+import hashlib
 from Crypto.PublicKey import RSA
 key = RSA.generate(1024)
 publickey2send = key.publickey()
@@ -41,35 +43,57 @@ R_nonce = key.decrypt(eval(temp))
 print('Nonce Received ='+ R_nonce)
 
 if str(R_nonce) == str(nonce) :
-	print('Authentication successful !!')
+        print('Authentication successful !!')
 
 else :
-	print('Authentication failed')
-	s.close()
+        print('Authentication failed')
+        s.close()
 
 
 while True:
-	msg = raw_input('\nEnter your message :: ')
-	print('Client :: Sending msg')	
-	#ENCRYPTING YOUR MSG
-	Tencypted = ServersPubkey.encrypt(msg,int(len(msg)))
-	s.sendall(str(Tencypted))
-	print('Your message in encrypted form looks like this ->' + str(Tencypted))
+        md5_obj = hashlib.md5()
+
+        msg = raw_input('\nEnter your message :: ')
+        md5_obj.update(msg);
+        print(md5_obj.hexdigest())
+        
+        print('Client :: Sending msg')	
+        #ENCRYPTING YOUR MSG
+        Tencypted = ServersPubkey.encrypt(msg,int(len(msg)))
+
+        s.sendall(str(Tencypted))
+        s.recv(16) #dummy recv
+        s.send(md5_obj.hexdigest())
+
+        print('Your message in encrypted form looks like this ->' + str(Tencypted))
     
-	if msg == 'bye' :
-		break
-		
 
-	received_msg = s.recv(1024)
-	decrypted = key.decrypt(eval(received_msg))
-	
-	print('\nClient:: msg received !! decrypted msg -> ' + decrypted + '\n')
-	
-	if str(decrypted) == 'bye':
-		break
+        if msg == 'bye' :
+                break
+                
+        hashrecv = s.recv(128)	
+        #dummy send 
+        s.send("a")	
+    
+        received_msg = s.recv(1024)
+        decrypted = key.decrypt(eval(received_msg))
+        md5_obj = hashlib.md5()
+        md5_obj.update(decrypted);
 
-	
-	
+        if md5_obj.hexdigest() != hashrecv :
+                print('hashes dont match')
+                break
+
+        else :
+        	print('\nhashes match! Received Message authenticated ! proceeding forward')
+
+        print('\nClient:: msg received !! decrypted msg -> ' + decrypted + '\n')
+        
+        if str(decrypted) == 'bye':
+                break
+
+        
+        
 
 print('closing socket')	
 s.close()
