@@ -41,11 +41,11 @@ and it will show you the version and other details.
    
 *3a) Download the project and unzip it* 
 
-*3b) Open your terminal and change directory to where your have  unzipped the project*
+*3b)Open 2 terminals , first one for the Server.py and second one for Client.py*
 
-*3c) Open 2 terminals , first one for the Server.py and second one for Client.py*
+*3c)change the directory to where your have  unzipped the project in both the terminals*
  
- **RUNNING THE PROJECT**
+ **INTERPRETING THE SCRIPTS**
  
  **Terminal_One $ python Server.py**
       
