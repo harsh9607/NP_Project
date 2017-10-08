@@ -25,7 +25,7 @@ For debain based distros (Ubuntu and mint) you can easily install Python 2 with 
 *$ sudo apt-get update*
 
 
-*$ sudo apt-get install python2*
+*$ sudo apt-get install python2.7*
 
 
 **2)Checking that python  was successfully installed** 
