@@ -1,5 +1,6 @@
 # Client Side
 #RSA ENCRYPTION USED (1024 bits)
+import random
 import socket
 from Crypto.PublicKey import RSA
 key = RSA.generate(1024)
@@ -26,6 +27,25 @@ data = s.recv(1024)
 decrypted = key.decrypt(eval(data))
 print(decrypted)
 
+#Authentication begins !
+#nonce = random.randint(0,10000)
+
+nonce = str(random.randint(0,10000))
+print('Nonce sent = ' + nonce)
+E_nonce = ServersPubkey.encrypt(nonce,int(len(nonce)))
+s.sendall(str(E_nonce))
+
+temp = s.recv(2017)
+R_nonce = key.decrypt(eval(temp))
+
+print('Nonce Received ='+ R_nonce)
+
+if str(R_nonce) == str(nonce) :
+	print('Authentication successful !!')
+
+else :
+	print('Authentication failed')
+	s.close()
 
 
 while True:
