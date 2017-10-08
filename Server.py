@@ -3,6 +3,8 @@
 #Socket Programming 
 import random
 import socket
+import hashlib
+import sys
 from Crypto.PublicKey import RSA
 key = RSA.generate(1024)
 publickey2send = key.publickey()
@@ -17,7 +19,7 @@ host = socket.gethostname()
 s.bind((host,8888))
 
 # server ready to listen 
-s.listen(2)
+s.listen(1)
 
 # Accepting connections
 print('Server :: waiting for Connections:')
@@ -49,14 +51,41 @@ c.sendall(str(E_d_nonce))
 
 
 while True:
-     
+    
+    
     data = c.recv(2017)
     decrypted = key.decrypt(eval(data))
-    print('Server :: msg  received !!decrypted message -> '+ decrypted)
-    print('\n')
+    
+    print('\n\nServer :: msg  received !!decrypted message -> '+ decrypted)
+    
     if str(decrypted) == 'bye' :
     	break
+
+    c.send("a") #dummy packet
+    
+    hashrecv = c.recv(128)
+    print('hash recv =' + hashrecv)
+    md5_obj = hashlib.md5()
+    md5_obj.update(decrypted);
+
+    # Authenticating the message
+    if md5_obj.hexdigest() != hashrecv:
+        print('hashes dont match')
+        break
+    else:
+        print('hashes match! Received Message authenticated ! proceeding forward')
+
+    
+
+    md5_obj2 = hashlib.md5()  
     msg2send = raw_input('Enter message for Client :: ')
+    md5_obj2.update(msg2send)
+    c.send(md5_obj2.hexdigest())
+    print(md5_obj2.hexdigest())
+    #put dummy recv here
+    c.recv(16)
+    
+    # Public key Encryption  
     Tencypted = ClientsPubKey.encrypt(msg2send,int(len(msg2send)))
     c.sendall(str(Tencypted))
     print('\nServer :: Sending msg in encrypted form')
