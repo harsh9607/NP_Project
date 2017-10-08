@@ -2,6 +2,10 @@
 # Author : Harsh Pathak 
 #Socket Programming 
 import socket
+from Crypto.PublicKey import RSA
+key = RSA.generate(1024)
+publickey2send = key.publickey()
+
 
 # Creating a Socket Object , Type : TCP 
 s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -10,22 +14,45 @@ s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 host = socket.gethostname()
 s.bind((host,8888))
 
-# server ready to listen to 2 connections at max 
-s.listen(3)
-print('Server:: waiting for Connections:') 
+# server ready to listen 
+s.listen(2)
+
+# Accepting connections
+print('Server :: waiting for Connections:')
 c , clientaddr = s.accept()   
 print('Server::Got a connection from client side')
+
+#Public Key Exchanges  
+print('Server :: Sending my Public key')
+c.send(publickey2send.exportKey());
+ClientsPubKey = RSA.importKey(c.recv(2048))
+print('Server :: Received Cilents Public key as well !')
+print('Key exchange successful ! \n')
+
+
+
+dummy = 'Oh hello there..harsh here i had encypted this..but..perhaps you decrypted it =P'
+Tencypted = ClientsPubKey.encrypt(dummy,int(len(dummy)))
+c.sendall(str(Tencypted))
+print('Your msg in encypted form looks like this ->' + str(Tencypted))
+
+
+
 while True:
- 
+     
     data = c.recv(2017)
-    print(str(data))
-    
-    if str(data) == 'bye' :
+    decrypted = key.decrypt(eval(data))
+    print('Server :: msg  received !!decrypted message -> '+ decrypted)
+    print('\n')
+    if str(decrypted) == 'bye' :
     	break
     msg2send = raw_input('Enter message for Client :: ')
-    c.send(msg2send.encode())
-    if str(msg2send) == 'bye' :
-    	break
+    Tencypted = ClientsPubKey.encrypt(msg2send,int(len(msg2send)))
+    c.sendall(str(Tencypted))
+    print('\nServer :: Sending msg in encrypted form')
+    print('Your encrypted msg looks like this ->' + str(Tencypted))
+    print('\n')
+
   
 
 print('closing socket !')    
