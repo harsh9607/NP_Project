@@ -27,6 +27,14 @@ For debain based distros (Ubuntu and mint) you can easily install Python 2 with 
 
 *$ sudo apt-get install python2.7*
 
+**MAKE SURE  YOU RUN THESE 2 Commands (FOR INSTALLING PIP AND PYCRYPTO)** 
+
+*$ sudo apt install python-pip*
+
+
+*$ pip install pycrypto* 
+
+
 
 **2)Checking that python  was successfully installed** 
 
