@@ -75,7 +75,7 @@ and it will show you the version and other details.
 
    Just add  C:\Python27; 
 
-**3)DOWNLOAD INSTALL PIP ** 
+**3)DOWNLOAD INSTALL PIP** 
 
    To use pip you must add the C:\Python27\Scripts;  into your path variables.
    
