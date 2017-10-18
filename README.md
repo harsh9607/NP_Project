@@ -81,7 +81,7 @@ and it will show you the version and other details.
    
    To cross check if the installation was sucessful , Open CMD and type pip and hit enter.
   
-**4) INSTALLING PYCRPTO LIBRARY ** 
+**4) INSTALLING PYCRPTO LIBRARY** 
 
    cmd Terminal >pip install pyCrypto 
    
