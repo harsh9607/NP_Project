@@ -1,6 +1,8 @@
 # TERM PROJECT  - SECURE IP 
 Author : Harsh Pathak
 
+Roll Number : 14115036 
+
 Institute : NITRR 
 
 All rights reserved to the Author
@@ -65,9 +67,31 @@ and it will show you the version and other details.
 
 **2)SETUP THE PATH VARIABLE**
 
-**3)CHANGE DIRECTORY TO WHERE YOU SCRIPT IS**
+   Open Control Panel, then System
+   
+   Click 'Advanced system settings' on the left
+   
+   Click the 'Environment Variables' button
 
-**4)OPEN CMD AND TYPE**
+   Just add  C:\Python27; 
+
+**3)DOWNLOAD INSTALL PIP ** 
+
+   To use pip you must add the C:\Python27\Scripts;  into your path variables.
+   
+   To cross check if the installation was sucessful , Open CMD and type pip and hit enter.
+  
+**4) INSTALLING PYCRPTO LIBRARY ** 
+
+   cmd Terminal >pip install pyCrypto 
+   
+   Just in case it doesnt work type you can try 
+   
+   cmd Terminal > pip install pycryptodome
+
+**5)CHANGE DIRECTORY TO WHERE YOU SCRIPT IS**
+
+**6)OPEN CMD AND TYPE**
 
 *C:\Desktop > python Server.py*
 
